@@ -1,38 +1,109 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+
+from adminpannel.form import UserDetailsForm
 from .models import UserDetails
+from django.contrib.auth.decorators import login_required
 
 
 def loginDetail(request):
-    return render(request,'login.html',)
+    if request.method == 'POST':
+        Email_Phone = request.POST.get('eamil_Phone')
+        password = request.POST.get('password')
+        if UserDetailsForm is not None:
+            for userlogin in UserDetails.objects.all():
+                if userlogin.email == Email_Phone and userlogin.password == password:
+                    print(userlogin.name)
+                    print(userlogin.email)
+                    print(userlogin.phone)
+                    return redirect('/home')
+            return HttpResponse("Your eamil or password is incorrect/<br><br><a href='/' class='btn btn-success'>Go to Login</a>")
+    return render(request,'login.html')
+
+
+
+            # else:
+            #     return HttpResponse("Your eamil or password is incorrect")
+            
+                # return render(request,'home.html',)
+                # if user is not None:
+            #         # login(request,user)
+            #     return redirect('/home')
+            # #     # return HttpResponse("Your eamil or password is incorrect")
+            # return HttpResponse("Your eamil or password is incorrect")
+        # user = authenticate(request, username=email_data, password=password_data)
+        # if user is not None:
+        #     login(request,user)
+        #     return redirect('/home')
+        # return HttpResponse("Your eamil or password is incorrect")
+    # return render(request,'login.html',)
+
+
+
 def signupDetail(request):
-    
+    if request.method == 'POST':
+        Name = request.POST.get('name')
+        Phone_Number = request.POST.get('Phone_Number')
+        Email = request.POST.get('email')
+        Pass = request.POST.get('pass')
+        My_signupDetails = UserDetails(Name,Name,Phone_Number,Email,Pass)
+        My_signupDetails.save()
+        # return HttpResponse("You have ")
+        return redirect('/')
     return render(request,'signup.html',)
     
 
 
-def signup(request):
+def signupDetail(request):
     if request.method == 'POST':
-        form = UserDetails(request.POST)
-        if form.is_valid():
-            new_user = form.save()
-            new_user = authenticate(
-                username=form.cleaned_data['username'],
-                password=form.cleaned_data['password1']
-            )
-            login(request, new_user)
-            return redirect('home')
-    else:
-        form = UserDetails()
-    return render(request, 'signup.html', {'form': form})
+        # Name = request.POST.get('name')
+        Phone_Number = request.POST.get('Phone_Number')
+        Email = request.POST.get('email')
+        Pass = request.POST.get('pass')
+        print("-------------------------------")
+        print(Phone_Number,Email,Pass)
+        print("-------------------------------")
+        My_signupDetails = User.objects.create_user(Phone_Number,Email,Pass)
+        My_signupDetails.save()
+        # return HttpResponse("You have ")
+        return redirect('/')
+    return render(request,'signup.html',)
 
 
 
+def AdminloginDetail(request):
+    if request.method == 'POST':
+        Eamil_Phone = request.POST.get('eamil_Phone')
+        password = request.POST.get('password')
+        user = authenticate(request, username=Eamil_Phone, password=password)
+        print("-------------------------------")
+        print(Eamil_Phone,password)
+        print(user)
+        print("-------------------------------")
+        if user is not None:
+            login(request,user)
+            return redirect('/home')
+        return HttpResponse("Your eamil or password is incorrect")
+    return render(request,'login.html',)
+
+    
+
+@login_required(login_url='/')
+def home(request):
+    return render(request,'home.html')
 
 
 
+def Logoutpage(request):
+    logout(request)
+    return redirect('/')
+
+
+def dashboard(request):
+    return render(request,'dashboard.html')
 
 
 

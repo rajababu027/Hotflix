@@ -8,4 +8,4 @@ class UserDetailsForm(forms.ModelForm):
 
     class Meta:
         model = UserDetails
-        fields = ('userId', 'name','phone','email', 'password')
+        fields = ('name','phone','email', 'password')

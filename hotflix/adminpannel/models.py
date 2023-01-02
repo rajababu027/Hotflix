@@ -1,15 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
+
 
 
 # create a tuple for the status of each post
 
 class UserDetails(models.Model):
-    userId = models.AutoField(primary_key=True)
+    userId = models.IntegerField(default=0 ,primary_key=True)
     name = models.CharField(max_length=100)
     phone = models.IntegerField()
     email = models.EmailField(max_length=100 , unique=True)
     password = models.CharField(max_length=100)
+    def save(self, *args, **kwargs):
+        userid = UserDetails.objects.all()
+
+        if userid.exists() and self._state.adding:
+            last_userid = userid.latest('userId')
+            self.userId = int(last_userid.userId) + 1
+        super().save(*args, **kwargs)
 
 
 class VideosDetails(models.Model):
@@ -38,36 +46,3 @@ class VideosDetails(models.Model):
     trailer = models.FileField(upload_to='tailers/', null=True, verbose_name="Trailer")
     video = models.FileField(upload_to='videos/', null=True, verbose_name="Video")
     
-	
-
-# each field in this class represents a column in the database table
-
-
-
-
-
-
-# # Create your models here.
-# class imageupload(models.Model):
-
-# 	# file will be uploaded to MEDIA_ROOT / uploads
-# 	upload = models.ImageField(upload_to ='uploads/')
-# 	videofile= models.FileField(upload_to='videos/', null=True, verbose_name="")
-
-
-
-# class Card(models.Model):
-#     class Suit(models.IntegerChoices):
-#         DIAMOND = 1
-#         SPADE = 2
-#         HEART = 3
-#         CLUB = 4
-
-#     suit = models.IntegerField(choices=Suit.choices)
-#     upload = models.ImageField(upload_to ='uploads/')
-#     videofile= models.FileField(upload_to='videos/', null=True, verbose_name="")
-	
-
-# 	# or...
-# 	# file will be saved to MEDIA_ROOT / uploads / 2015 / 01 / 30
-# 	# upload = models.ImageField(upload_to ='uploads/% Y/% m/% d/')

@@ -125,7 +125,7 @@ def Dashboard(request):
 def videoList(request):
     all_videos_data = VideosDetails.objects.all()
     return render(request,'videolist.html',{'all':all_videos_data}) 
-    # return render(request,'videolist.html')
+   
 
 
 # def videoDetailsUpload(request):

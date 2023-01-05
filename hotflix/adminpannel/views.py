@@ -4,9 +4,25 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
-from adminpannel.form import UserDetailsForm
-from .models import UserDetails
+from adminpannel.form import UserDetailsForm, Video_form
+from .models import UserDetails, VideosDetails
 from django.contrib.auth.decorators import login_required
+
+
+
+def videoDetailsUpload(request):
+    # all_video=VideosDetails.objects.all()
+    if request.method == "POST":    
+        form=Video_form(data=request.POST,files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/videoUpload' class='btn btn-success'>Go to Back</a>")
+    else:
+        form=Video_form()
+    return render(request,'video_upload.html', {'form':form})
+            #     return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/home' class='btn btn-success'>Go to Home</a>")
+       
+
 
 
 def loginDetail(request):
@@ -20,7 +36,7 @@ def loginDetail(request):
                     print(userlogin.email)
                     print(userlogin.phone)
                     return redirect('/home')
-            return HttpResponse("Your eamil or password is incorrect/<br><br><a href='/' class='btn btn-success'>Go to Login</a>")
+            return HttpResponse("Your eamil or password is incorrect........<br><br><a href='/' class='btn btn-success'>Go to Login</a>")
     return render(request,'login.html')
 
 
@@ -57,7 +73,7 @@ def signupDetail(request):
     
 
 
-def signupDetail(request):
+def AdminsignupDetail(request):
     if request.method == 'POST':
         # Name = request.POST.get('name')
         Phone_Number = request.POST.get('Phone_Number')
@@ -91,9 +107,10 @@ def AdminloginDetail(request):
 
     
 
-@login_required(login_url='/')
+# @login_required(login_url='/')
 def home(request):
-    return render(request,'home.html')
+    all_videos_data = VideosDetails.objects.all()
+    return render(request,'home.html',{'all':all_videos_data})  
 
 
 
@@ -102,8 +119,51 @@ def Logoutpage(request):
     return redirect('/')
 
 
-def dashboard(request):
+def Dashboard(request):
     return render(request,'dashboard.html')
+
+def videoList(request):
+    all_videos_data = VideosDetails.objects.all()
+    return render(request,'videolist.html',{'all':all_videos_data}) 
+    # return render(request,'videolist.html')
+
+
+# def videoDetailsUpload(request):
+#     if request.method == 'POST':
+#         image = request.POST.get('image')
+#         title_image = request.POST.get('title_image')
+#         thumbnail_image = request.POST.get('thumbnail_image')
+#         title = request.POST.get('title')
+#         description = request.POST.get('description')
+#         Year = request.POST.get('year')
+#         Genre = request.POST.get('genre')
+#         type = request.POST.get('type')
+#         trailer = request.POST.get('trailer')
+#         video = request.POST.get('video')
+#         print("-------------------------------")
+#         print(image,image,title_image,thumbnail_image,title,description,Year,Genre,type,trailer,video)
+#         print("----------------")
+#         My_signupDetails = VideosDetails(image,image,title_image,thumbnail_image,title,description,Year,Genre,type,trailer,video)
+#         My_signupDetails.save()
+#         # return HttpResponse("You have ")
+#         return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/home' class='btn btn-success'>Go to Home</a>")
+#     return render(request,'video_upload.html')
+
+
+
+
+
+
+     # return render(request,'video_upload.html')
+
+
+
+        
+        #     return HttpResponse("<h1> Upload success</h1>")
+        # else:
+    #     #     video_form = VideosDetailsForm()
+    # return render(request,'dashboard.html')
+
 
 
 

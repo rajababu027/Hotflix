@@ -1,0 +1,92 @@
+{% extends 'dashboardBase.html' %}
+{% load static %}
+{% block title %}Video Upload {% endblock title %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Video List</h1>
+        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+    </div>
+
+    <div class="container-fluid">
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">All Videos</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Video</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Genre</th>
+                                <th>Year</th>
+                                <th>Update</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <!-- <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Age</th>
+                                <th>Start date</th>
+                                <th>Salary</th>
+                            </tr>
+                        </tfoot> -->
+                        <tbody>
+                            {% for x in all %}
+                            <tr>
+                                <td>
+                                    <div class="card" style="width:200px; height: 100px;">
+                                        <video class="card-img-top" controls="controls">
+                                            <source src="{{x.video.url}}" type="video/mp4" />
+                                        </video>
+                                        <!-- <img src="{% static 'hotflix/images/trending/img6.jpeg' %}" class="card-img-top" alt="..."> -->
+                                    </div>
+                                </td>
+                                <td>{{x.title}}</td>
+                                <td>{{x.description}}</td>
+                                <td>{{x.type}}</td>
+                                <td>{{x.genre}}</td>
+                                <td>{{x.year}}</td>
+                                <td>{{x.id}}</td>
+                                <td>{{x.id}}</td>
+                            </tr>{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+{% endblock content %}

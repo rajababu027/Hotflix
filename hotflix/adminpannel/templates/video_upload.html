@@ -1,0 +1,113 @@
+{% extends 'dashboardBase.html' %}
+{% load static %}
+{% block title %}Video Upload {% endblock title %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Video Upload</h1>
+      <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+              class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+  </div>
+    <div class="mt-5">
+      <form  method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{form.as_p}}
+      <div class="col-3">
+        <button type="submit" class="btn btn-primary m-2">Upload</button>
+      </div>
+      <!-- <button class="btn btn-success btn-lg">Upload</button> -->
+      
+      </form>
+      </div>
+</div>
+    <!-- <form method="POST" class="row g-3" >
+      {% csrf_token %}
+      <div class="col-md-3">
+        <label for="formFile" class="form-label">Image</label>
+        <input class="form-control" type="file" id="formFile" name="image">
+      </div>
+
+      <div class="col-md-3">
+        <label for="formFile" class="form-label">Title Image</label>
+        <input class="form-control" type="file" id="formFile" name="titleImage">
+      </div>
+
+      <div class="col-md-3">
+        <label for="formFile" class="form-label">Thumbnail Image</label>
+        <input class="form-control" type="file" id="formFile" name="thumbnailImage">
+      </div>
+
+
+      
+
+      
+      <div class="col-md-3">
+        <label for="inputEmail4" class="form-label">Title</label>
+        <input type="text" class="form-control" id="inputEmail4" name="title">
+      </div>
+
+      <div class="col-md-3">
+        <label for="inputEmail4" class="form-label">Description</label>
+        <input type="text" class="form-control" id="inputEmail4" name="description">
+      </div>
+      
+      <div class="col-md-3">
+        <label for="inputEmail4" class="form-label">Year</label>
+        <input type="text" class="form-control" id="inputEmail4" name="year">
+      </div>
+      
+      <div class="col-md-3">
+        <label for="inputEmail4" class="form-label">Genre</label>
+        <input type="text" class="form-control" id="inputEmail4" name="genre">
+      </div>
+
+      
+      <div class="col-md-3">
+        <label for="inputState" class="form-label">Type</label><br>
+        <select id="inputState" class="form-select" name="type">
+          <option selected>Choose...</option>
+          <option>Music Videos</option>
+          <option>Web Series</option>
+          <option>Movies</option>
+          <option>Trailers</option>
+          <option>Kids</option>
+          <option>Devotional</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label for="formFile" class="form-label">Trailer</label>
+        <input class="form-control" type="file" id="formFile" name="trailer">
+      </div>
+
+
+      <div class="col-md-3">
+        <label for="formFile" class="form-label">Video</label>
+        <input class="form-control" type="file" id="formFile" name="video">
+      </div>
+
+
+<br></br>
+      <div class="col-3">
+        <button type="submit" class="btn btn-primary m-2">Upload</button>
+      </div>
+    </form> -->
+
+
+
+
+    
+    <!-- <a href="{% url 'logout' %}" class="btn btn-success">Logout</a> -->
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <!--  -->
+
+    {% endblock content %}

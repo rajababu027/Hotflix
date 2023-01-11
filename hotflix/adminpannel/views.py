@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.template import loader
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from adminpannel.form import UserDetailsForm, Video_form
 from .models import UserDetails, VideosDetails
 from django.contrib.auth.decorators import login_required
+import os
 
 
 
@@ -107,7 +110,7 @@ def AdminloginDetail(request):
 
     
 
-# @login_required(login_url='/')
+@login_required(login_url='/')
 def home(request):
     all_videos_data = VideosDetails.objects.all()
     return render(request,'home.html',{'all':all_videos_data})  
@@ -125,29 +128,75 @@ def Dashboard(request):
 def videoList(request):
     all_videos_data = VideosDetails.objects.all()
     return render(request,'videolist.html',{'all':all_videos_data}) 
+
+
+def delete(request, id):
+  VideoDelete = VideosDetails.objects.get(id=id)
+  VideoDelete.delete()
+  return HttpResponseRedirect(reverse('videoList'))
+
+
+def update(request, id):
+  mymember = VideosDetails.objects.get(id=id)
+  template = loader.get_template('videoUpdate.html')
+  context = {
+    'mymember': mymember,
+  }
+  return HttpResponse(template.render(context, request))
    
 
+def updaterecord(request, id):
+    member = VideosDetails.objects.get(id=id)
+    if request.method == "POST":
+        if len(request.FILES) != 0:
+            if len(member.video) > 0:
+                os.remove(member.video.path)
+                member.video = request.FILES['video']
+                
+            elif len(member.trailer) > 0:
+                os.remove(member.trailer.path)
+                member.trailer = request.FILES['trailer']
+                
+       
+        title = request.POST['title']
+        year = request.POST['year']
+        description = request.POST['description']
+        genre = request.POST['genre']
+        Type = request.POST['type']
+        # image = request.POST['image']
+        # video = request.POST['video']
+        # member = VideosDetails.objects.get(id=id)
+        member.title = title
+        member.year = int(year)
+        member.description = description
+        member.type = Type
+        member.genre = genre
+        # member.image = image
+        member.save()
+        # message.success(request, "Your Video has Successfully updated")
+        return redirect('/videoList')
+    return HttpResponseRedirect(reverse('videoList'))
 
-# def videoDetailsUpload(request):
-#     if request.method == 'POST':
-#         image = request.POST.get('image')
-#         title_image = request.POST.get('title_image')
-#         thumbnail_image = request.POST.get('thumbnail_image')
-#         title = request.POST.get('title')
-#         description = request.POST.get('description')
-#         Year = request.POST.get('year')
-#         Genre = request.POST.get('genre')
-#         type = request.POST.get('type')
-#         trailer = request.POST.get('trailer')
-#         video = request.POST.get('video')
-#         print("-------------------------------")
-#         print(image,image,title_image,thumbnail_image,title,description,Year,Genre,type,trailer,video)
-#         print("----------------")
-#         My_signupDetails = VideosDetails(image,image,title_image,thumbnail_image,title,description,Year,Genre,type,trailer,video)
-#         My_signupDetails.save()
-#         # return HttpResponse("You have ")
-#         return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/home' class='btn btn-success'>Go to Home</a>")
-#     return render(request,'video_upload.html')
+def videoDetailsUpload(request):
+
+    if request.method == 'POST':
+        videoData = VideosDetails()
+        videoData.image = request.FILES.get('image')
+        videoData.titleImage = request.FILES.get('titleImage')
+        videoData.thumbnailImage = request.FILES.get('thumbnailImage')
+        videoData.title = request.POST.get('title')
+        videoData.description = request.POST.get('description')
+        videoData.year = request.POST.get('year')
+        videoData.genre = request.POST.get('genre')
+        videoData.type = request.POST.get('type')
+        videoData.trailer = request.FILES.get('trailer')
+        videoData.video = request.FILES.get('video')
+
+        # My_signupDetails = VideosDetails(image,image,title_image,thumbnail_image,title,description,Year,Genre,type,trailer,video)
+        videoData.save()
+        # return HttpResponse("You have ")
+        return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/videoUpload' class='btn btn-success'>Go to Back</a>")
+    return render(request,'video_upload.html')
 
 
 

@@ -20,7 +20,7 @@ def videoDetailsUpload(request):
     else:
         form=Video_form()
     return render(request,'video_upload.html', {'form':form})
-            #     return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/home' class='btn btn-success'>Go to Home</a>")
+                # return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/home' class='btn btn-success'>Go to Home</a>")
        
 
 

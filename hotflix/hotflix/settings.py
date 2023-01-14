@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'adminpannel',
-    # 'adminpannel.apps.ApiConfig',
     'rest_framework',
 
 ]

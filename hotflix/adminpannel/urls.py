@@ -2,6 +2,7 @@ from . import views
 from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
+from .views import VideoDetailsList, VideoDetailsDetail,UserDetailsList, UserDetailsDetail
 
 urlpatterns = [
     path('', views.loginDetail, name='Login'),
@@ -14,6 +15,10 @@ urlpatterns = [
     path('delete/<int:id>', views.delete, name='delete'),
     path('update/<int:id>', views.update, name='update'),
     path('update/updaterecord/<int:id>', views.updaterecord, name='updaterecord'),
+    path('video/', VideoDetailsList.as_view()),
+    path('video/<int:pk>/', VideoDetailsDetail.as_view()),
+    path('user/', UserDetailsList.as_view()),
+    path('user/<int:pk>/', UserDetailsDetail.as_view()),
     # path('<slug:slug>', views.PostDetail.as_view(), name='post_detail'),
     # path('contact/', views.contact_form, name='contact'),
     # path('signup/', views.signup, name='signup')

@@ -11,13 +11,13 @@ class UserDetails(models.Model):
     phone = models.IntegerField()
     email = models.EmailField(max_length=100 , unique=True)
     password = models.CharField(max_length=100)
-    def save(self, *args, **kwargs):
-        userid = UserDetails.objects.all()
+    # def save(self, *args, **kwargs):
+    #     userid = UserDetails.objects.all()
 
-        if userid.exists() and self._state.adding:
-            last_userid = userid.latest('userId')
-            self.userId = int(last_userid.userId) + 1
-        super().save(*args, **kwargs)
+    #     if userid.exists() and self._state.adding:
+    #         last_userid = userid.latest('userId')
+    #         self.userId = int(last_userid.userId) + 1
+    #     super().save(*args, **kwargs)
 
 
 class VideosDetails(models.Model):

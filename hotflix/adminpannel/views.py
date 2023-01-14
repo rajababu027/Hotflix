@@ -11,6 +11,12 @@ from .models import UserDetails, VideosDetails
 from django.contrib.auth.decorators import login_required
 import os
 
+from rest_framework import generics
+
+from .models import VideosDetails, UserDetails
+from .serializers import VideoDetailsSerializer, UserDetailsSerializer
+
+
 
 
 def videoDetailsUpload(request):
@@ -44,32 +50,20 @@ def loginDetail(request):
 
 
 
-            # else:
-            #     return HttpResponse("Your eamil or password is incorrect")
-            
-                # return render(request,'home.html',)
-                # if user is not None:
-            #         # login(request,user)
-            #     return redirect('/home')
-            # #     # return HttpResponse("Your eamil or password is incorrect")
-            # return HttpResponse("Your eamil or password is incorrect")
-        # user = authenticate(request, username=email_data, password=password_data)
-        # if user is not None:
-        #     login(request,user)
-        #     return redirect('/home')
-        # return HttpResponse("Your eamil or password is incorrect")
-    # return render(request,'login.html',)
-
 
 
 def signupDetail(request):
     if request.method == 'POST':
-        Name = request.POST.get('name')
-        Phone_Number = request.POST.get('Phone_Number')
-        Email = request.POST.get('email')
-        Pass = request.POST.get('pass')
-        My_signupDetails = UserDetails(Name,Name,Phone_Number,Email,Pass)
-        My_signupDetails.save()
+        userDetails = UserDetails()
+        userDetails.name = request.POST.get('name')
+        userDetails.phone = request.POST.get('Phone_Number')
+        userDetails.email = request.POST.get('email')
+        userDetails.password = request.POST.get('pass')
+        print("--------------------------------------------")
+        print(request.POST.get('name'), request.POST.get('Phone_Number'),request.POST.get('email'),request.POST.get('pass'))
+        userDetails.save()
+        print("--------------------------------------------")
+
         # return HttpResponse("You have ")
         return redirect('/')
     return render(request,'signup.html',)
@@ -163,9 +157,6 @@ def updaterecord(request, id):
         description = request.POST['description']
         genre = request.POST['genre']
         Type = request.POST['type']
-        # image = request.POST['image']
-        # video = request.POST['video']
-        # member = VideosDetails.objects.get(id=id)
         member.title = title
         member.year = int(year)
         member.description = description
@@ -173,7 +164,6 @@ def updaterecord(request, id):
         member.genre = genre
         # member.image = image
         member.save()
-        # message.success(request, "Your Video has Successfully updated")
         return redirect('/videoList')
     return HttpResponseRedirect(reverse('videoList'))
 
@@ -191,87 +181,30 @@ def videoDetailsUpload(request):
         videoData.type = request.POST.get('type')
         videoData.trailer = request.FILES.get('trailer')
         videoData.video = request.FILES.get('video')
-
-        # My_signupDetails = VideosDetails(image,image,title_image,thumbnail_image,title,description,Year,Genre,type,trailer,video)
         videoData.save()
-        # return HttpResponse("You have ")
         return HttpResponse("Your Video Details has Successfully Uploaded <br><br><a href='/videoUpload' class='btn btn-success'>Go to Back</a>")
     return render(request,'video_upload.html')
 
 
 
 
+# API Views 
+
+class VideoDetailsList(generics.ListCreateAPIView):
+    queryset = VideosDetails.objects.all()
+    serializer_class = VideoDetailsSerializer
 
 
-     # return render(request,'video_upload.html')
+class VideoDetailsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = VideosDetails.objects.all()
+    serializer_class = VideoDetailsSerializer
 
 
-
-        
-        #     return HttpResponse("<h1> Upload success</h1>")
-        # else:
-    #     #     video_form = VideosDetailsForm()
-    # return render(request,'dashboard.html')
+class UserDetailsList(generics.ListCreateAPIView):
+    queryset = UserDetails.objects.all()
+    serializer_class = UserDetailsSerializer
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class PostList(generic.ListView):
-#     queryset = Post.objects.filter(status=1).order_by('-created_on')
-#     template_name = 'blog/index.html'  # a list of all posts will be displayed on index.html
-
-
-# class PostDetail(generic.DetailView):
-#     model = Post
-#     template_name = 'blog/post_detail.html'  # detail about each blog post will be on post_detail.html
-
-
-# def contact_form(request):
-#     form = ContactForm()
-#     if request.method == 'POST':
-#         form = ContactForm(request.POST)
-#         if form.is_valid():
-#             subject = f'Message from {form.cleaned_data["name"]}'
-#             message = form.cleaned_data["message"]
-#             sender = form.cleaned_data["email"]
-#             recipients = ['thekodechamp@gmail.com']
-#             try:
-#                 send_mail(subject, message, sender, recipients, fail_silently=True)
-#             except BadHeaderError:
-#                 return HttpResponse('Invalid header found')
-#             return HttpResponse('Success...Your email has been sent')
-#     return render(request, 'blog/contact.html', {'form': form})
-
-
-# def signup(request):
-#     if request.method == 'POST':
-#         form = UserCreateForm(request.POST)
-#         if form.is_valid():
-#             new_user = form.save()
-#             new_user = authenticate(
-#                 username=form.cleaned_data['username'],
-#                 password=form.cleaned_data['password1']
-#             )
-#             login(request, new_user)
-#             return redirect('home')
-#     else:
-#         form = UserCreateForm()
-#     return render(request, 'registration/signup.html', {'form': form})
+class UserDetailsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = UserDetails.objects.all()
+    serializer_class = UserDetailsSerializer

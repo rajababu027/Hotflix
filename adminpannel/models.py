@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 # create a tuple for the status of each post
 
 class UserDetails(models.Model):
-    userId = models.IntegerField(default=0 ,primary_key=True)
     name = models.CharField(max_length=100)
     phone = models.IntegerField()
     email = models.EmailField(max_length=100 , unique=True)

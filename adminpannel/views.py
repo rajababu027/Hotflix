@@ -168,10 +168,8 @@ def updaterecord(request, id):
     return HttpResponseRedirect(reverse('videoList'))
 
 def videoDetailsUpload(request):
-
     if request.method == 'POST':
         videoData = VideosDetails()
-        videoData.image = request.FILES.get('image')
         videoData.titleImage = request.FILES.get('titleImage')
         videoData.thumbnailImage = request.FILES.get('thumbnailImage')
         videoData.title = request.POST.get('title')
